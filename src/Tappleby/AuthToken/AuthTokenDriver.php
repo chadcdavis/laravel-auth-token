@@ -89,7 +89,9 @@ class AuthTokenDriver {
    * @return bool|AuthToken
    */
   public function create(UserInterface $user) {
-    $this->tokens->purge($user);
+      // disable purge here, which enables multiple tokens. 
+      // we now manage purging ourselves  
+      // $this->tokens->purge($user);
     return $this->tokens->create($user);
   }
 
