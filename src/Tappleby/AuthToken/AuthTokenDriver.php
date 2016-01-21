@@ -76,7 +76,15 @@ class AuthTokenDriver {
     $user = $this->users->retrieveByCredentials($credentials);
 
     if($user instanceof UserInterface && $this->users->validateCredentials($user, $credentials)) {
-       return $this->create($user);
+
+        // Enable "Internal Only" flag in users table, restricting access to internal only
+        if ($user->internal_only) {
+            if (! preg_match('/^(10\.11|192\.168)\./', $_SERVER['REMOTE_ADDR'])){
+                return false;
+            }
+        }
+
+        return $this->create($user);
     }
 
     return false;
